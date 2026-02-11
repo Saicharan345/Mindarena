@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MindArena</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<h1>MindArena</h1>
+
+<div class="card">
+    <h2>Login</h2>
+    <input id="username" placeholder="Username">
+    <input id="password" type="password" placeholder="Password">
+    <br><br>
+    <button onclick="login()">Login</button>
+    <button onclick="register()">Register</button>
+    <p id="loginMsg"></p>
+</div>
+
+<div class="card">
+    <h2>Word Connect</h2>
+    <input id="wordInput" placeholder="Enter word">
+    <button onclick="checkWord()">Submit</button>
+    <p id="message"></p>
+</div>
+
+<div class="card">
+    <h2>Leaderboard</h2>
+    <button onclick="loadLeaderboard()">Load Leaderboard</button>
+    <ul id="board"></ul>
+</div>
+
+<script src="/static/script.js"></script>
+</body>
+</html>
