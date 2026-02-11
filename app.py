@@ -1,8 +1,13 @@
 from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
+import os
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///game.db'
+
+# ---------------- DATABASE CONFIG (RENDER SAFE) ---------------- #
+
+basedir = os.path.abspath(os.path.dirname(__file__))
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'game.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -15,7 +20,7 @@ class User(db.Model):
     password = db.Column(db.String(100), nullable=False)
     score = db.Column(db.Integer, default=0)
 
-# ---------------- TRIE ---------------- #
+# ---------------- TRIE IMPLEMENTATION ---------------- #
 
 class TrieNode:
     def __init__(self):
@@ -47,11 +52,11 @@ trie = Trie()
 # ---------------- LOAD DICTIONARY ---------------- #
 
 try:
-    with open("words.txt", "r") as f:
+    with open(os.path.join(basedir, "words.txt"), "r") as f:
         for word in f:
             trie.insert(word.strip().lower())
-except:
-    print("words.txt not found!")
+except Exception as e:
+    print("Error loading words.txt:", e)
 
 # ---------------- ROUTES ---------------- #
 
@@ -117,4 +122,7 @@ def leaderboard():
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
-    app.run(debug=True)
+
+    # Render needs this:
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
